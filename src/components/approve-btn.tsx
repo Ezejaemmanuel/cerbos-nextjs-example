@@ -1,8 +1,13 @@
 import { Button } from "./ui/button";
+import { ReactNode } from "react";
 
-export default function ApproveBtn({ children }) {
+interface ApproveBtnProps {
+  children: ReactNode;
+}
+
+export default function ApproveBtn({ children }: ApproveBtnProps) {
   return (
-    <Button size="sm" variant="positive">
+    <Button size="lg" className="bg-red-500" variant="positive">
       {children}
     </Button>
   );

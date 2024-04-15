@@ -3,6 +3,8 @@ import { expense } from "@/lib/example-data";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, params: { id: string }) {
+  console.log("GET request received for expense with ID:", params.id);
+
   // 1) authn check: get user info (from Kinde, Okta/Auth0, NextAuth, etc.)
   // const user = await getUser();
   // if (!user) {
@@ -11,8 +13,9 @@ export async function GET(req: Request, params: { id: string }) {
   const user = {
     id: "clsdcjf06000008lccu6ud5et",
     name: "Lisa",
-    roles: ["MANAGER"],
+    roles: ["USER"],
   };
+  console.log("User information:", user);
 
   // 2) get resource info (from database)
   // const expense = await prisma.expense.findUnique({
@@ -25,6 +28,7 @@ export async function GET(req: Request, params: { id: string }) {
     status: "PENDING",
     createdBy: "clsdcjf06000008lccu6ud5et",
   };
+  console.log("Expense information:", expense);
 
   // 3) authz check
   const decision = await cerbos.checkResource({
@@ -38,11 +42,15 @@ export async function GET(req: Request, params: { id: string }) {
       kind: "expense",
       attr: expense,
     },
-    actions: ["view"],
+    actions: ["edit"],
   });
-  console.log(decision.isAllowed("view"));
+  console.log(
+    "Authorization decision for viewing expense:",
+    decision.isAllowed("edit")
+  );
 
-  if (!decision.isAllowed("view")) {
+  if (!decision.isAllowed("edit")) {
+    console.log("User is not authorized to view the expense");
     return NextResponse.json(
       {
         error: "Not authorized.",
@@ -54,10 +62,13 @@ export async function GET(req: Request, params: { id: string }) {
   }
 
   // 4) return expense for viewing
+  console.log("Returning expense data:", expense);
   return NextResponse.json(expense);
 }
 
-export async function PUT(req: Request, params) {
+export async function PUT(req: Request) {
+  console.log("PUT request received");
+
   // 1) authn check: get user info (from Kinde, Okta/Auth0, NextAuth, etc.)
   // const user = await getUser();
   // if (!user) {
@@ -66,8 +77,9 @@ export async function PUT(req: Request, params) {
   const user = {
     id: "clsdcjf06000008lccu6ud5et",
     name: "Lisa",
-    roles: ["MANAGER"],
+    roles: ["USER"],
   };
+  console.log("User information:", user);
 
   // 2) get resource info (from database)
   // const expense = await prisma.expense.findUnique({
@@ -80,6 +92,7 @@ export async function PUT(req: Request, params) {
     status: "PENDING",
     createdBy: "clsdcjf06000008lccu6ud5et",
   };
+  console.log("Expense information:", expense);
 
   // 3) authz check
   const decision = await cerbos.checkResource({
@@ -95,7 +108,13 @@ export async function PUT(req: Request, params) {
     },
     actions: ["approve"],
   });
+  console.log(
+    "Authorization decision for approving expense:",
+    decision.isAllowed("approve")
+  );
+
   if (!decision.isAllowed("approve")) {
+    console.log("User is not authorized to approve the expense");
     return NextResponse.json(
       {
         error: "Not authorized.",
@@ -115,4 +134,5 @@ export async function PUT(req: Request, params) {
   //     status: approved,
   //   },
   // });
+  console.log("Expense approval status updated in the database");
 }

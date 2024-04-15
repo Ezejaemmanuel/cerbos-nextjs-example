@@ -1,0 +1,8 @@
+PS C:\Users\HP\development\web-development\javascript-node\cerbos-quickstart> docker run --rm --name cerbos `
+>>   -p 3592:3592 -p 3593:3593 `
+>>   -e CERBOS_HUB_BUNDLE="latest" `
+>>   -e CERBOS_HUB_WORKSPACE_SECRET="CERBOS-1K5CKHLCG5512-CYJ22KJ93J0FA5FZ7T60CQ9W5EN9MTMZ6H30MLZ405JTJ2AA6TAQ7SES7Q" `
+>>   -e CERBOS_HUB_CLIENT_ID="7ZOE05N31TIB" `
+>>   -e CERBOS_HUB_CLIENT_SECRET="cerbos_eLC7dhH4/tAQEiBsU+B1FKpNMZQEQQi88REV1JbuygI" `
+>>   ghcr.io/cerbos/cerbos:0.35.1 server
+>>

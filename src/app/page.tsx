@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Expense } from "@/lib/types";
 import cerbos from "@/lib/cerbos-browser";
 import { useCerbos } from "@/lib/hooks";
+import { addBaseURL } from "@/lib/addBaseUrl";
 
 const id = "6354645";
 
@@ -16,50 +17,48 @@ export default function ExpensePage() {
 
   // const canApprove = useCerbos(user, expense, "approve");
 
-  // 1) authn check: get user info (from Kinde, Okta/Auth0, NextAuth, etc.)
   // const { data: session } = useSession();
-  // const user = {
-  //   id: "clsdcjf06000008lccu6ud5et",
-  //   name: "Lisa",
-  //   roles: ["USER"],
-  // };
+  const user = {
+    id: "clsdcjf06000008lccu6ud5et",
+    name: "Lisa",
+    roles: ["USER"],
+  };
 
-  // 2) get resource info
-  // useEffect(() => {
-  //   const fetchExpense = async () => {
-  //     const res = await fetch(`/api/expenses/${id}`);
-  //     const data = await res.json();
-  //     setExpense(data);
-  //   };
+  useEffect(() => {
+    const fetchExpense = async () => {
+      const url = addBaseURL(`api/expenses/${id}`);
+      const res = await fetch(url);
+      const data = await res.json();
+      setExpense(data);
+    };
 
-  //   fetchExpense();
-  // }, [id]);
+    fetchExpense();
+  }, [id]);
 
-  // 3) authz check
-  // useEffect(() => {
-  //   if (!expense) return;
+  useEffect(() => {
+    if (!expense) return;
 
-  //   const checkAuthz = async () => {
-  //     const decision = await cerbos.checkResource({
-  //       principal: {
-  //         id: user.id,
-  //         roles: user.roles,
-  //         attr: user,
-  //       },
-  //       resource: {
-  //         id: expense.id,
-  //         kind: "expense",
-  //         attr: expense,
-  //       },
-  //       actions: ["edit", "approve"],
-  //     });
+    const checkAuthz = async () => {
+      const decision = await cerbos.checkResource({
+        principal: {
+          id: user.id,
+          roles: user.roles,
+          attr: user,
+        },
+        resource: {
+          id: expense.id,
+          kind: "expense",
+          attr: expense,
+        },
+        actions: ["edit", "approve"],
+      });
 
-  //     setCanEdit(decision.isAllowed("edit")!);
-  //     setCanApprove(decision.isAllowed("approve")!);
-  //   };
+      setCanEdit(decision.isAllowed("edit")!);
+      setCanApprove(decision.isAllowed("approve")!);
+    };
 
-  //   checkAuthz();
-  // }, [expense, user]);
+    checkAuthz();
+  }, [expense, user]);
 
   return (
     <main className="px-12 py-8">
