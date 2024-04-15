@@ -1,6 +1,5 @@
+---
 apiVersion: api.cerbos.cloud/v1
 labels:
-  latest: 
-    branch: main 
-  hotfix:
-    commitHash: 46fd83be984be4040534fc99501dd2a776368c08
+  latest: # 'latest' label pointing to the HEAD of the main branch
+    branch: main
