@@ -1,7 +1,24 @@
 import { useEffect, useState } from "react";
 import cerbos from "./cerbos-browser";
 
-export function useCerbos(user, resource, action) {
+interface User {
+  id: string;
+  roles: string[];
+  attr: {
+    [key: string]: any;
+  };
+}
+
+interface Resource {
+  id: string;
+  [key: string]: any;
+}
+
+export function useCerbos(
+  user: User,
+  resource: Resource,
+  action: string
+): boolean {
   const [isAllowed, setIsAllowed] = useState(false);
 
   useEffect(() => {

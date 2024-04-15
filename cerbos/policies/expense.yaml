@@ -20,4 +20,4 @@ resourcePolicy:
         - MANAGER
       condition:
         match:
-          expr: request.resource.attr.amount < 5000
+          expr: request.resource.attr.amount < 10000
